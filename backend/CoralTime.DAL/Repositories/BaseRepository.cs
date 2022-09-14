@@ -86,7 +86,7 @@ namespace CoralTime.DAL.Repositories
                         items = _cacheManager.CachedListGet<T>(key);
                         if (items == null)
                         {
-                            items = GetQueryAsNoTrackingWithIncludes().ToList();
+                            items = GetQueryWithIncludes().ToList();
                             _cacheManager.LinkedPutList(key, items);
                         }
                     }

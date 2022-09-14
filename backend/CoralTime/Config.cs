@@ -4,6 +4,7 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoralTime
 {
@@ -25,13 +26,28 @@ namespace CoralTime
         {
             return new List<ApiResource>
             {
-                new ApiResource("WebAPI" ) {
-                    UserClaims = { JwtClaimTypes.Email, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Id}
+                new ApiResource("WebAPI") {
+                    Scopes = new []{ "WebAPI","openid", "profile", "roles" },
+                    UserClaims = { JwtClaimTypes.Email, JwtClaimTypes.Audience, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Subject, JwtClaimTypes.Id }
                 }
             };
         }
 
-        public static IEnumerable<Client> GetClients(int accessTokenLifetime, int refreshTokenLifetime, int slidingRefreshTokenLifetime)
+        // Api resources.
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
+            {
+                new ApiScope("WebAPI") 
+                {
+                    
+                    UserClaims = { JwtClaimTypes.Audience, JwtClaimTypes.Email, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Id, JwtClaimTypes.Subject, JwtClaimTypes.Id}
+                }
+            };
+        }
+
+
+    public static IEnumerable<Client> GetClients(int accessTokenLifetime, int refreshTokenLifetime, int slidingRefreshTokenLifetime)
         {
             return new List<Client>
             {
@@ -42,6 +58,8 @@ namespace CoralTime
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword, // Resource Owner Password Credential grant.
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false, // This client does not need a secret to request tokens from the token endpoint.
+                     AlwaysIncludeUserClaimsInIdToken = true,
+                     AlwaysSendClientClaims = true,
                     
                     UpdateAccessTokenClaimsOnRefresh = true,
                     AccessTokenLifetime = accessTokenLifetime,
@@ -54,7 +72,8 @@ namespace CoralTime
                         IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.Profile,
                         "roles",
-                        "WebAPI"
+                        "WebAPI",
+                        "offline_access"
                     },
                     AllowOfflineAccess = true, // For refresh token.
                  },

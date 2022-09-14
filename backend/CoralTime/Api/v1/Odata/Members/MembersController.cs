@@ -14,21 +14,24 @@ using static CoralTime.Common.Constants.Constants.Routes.OData;
 
 using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
+using CoralTime.Common.Middlewares;
 
 namespace CoralTime.Api.v1.Odata.Members
 {
     [Authorize]
-    [Route(BaseODataControllerRoute)]
     public class MembersController : BaseODataController<MembersController, IMemberService>
     {
         private readonly IImageService _avatarService;
+
         public MembersController(IMemberService service, ILogger<MembersController> logger, IMapper mapper, IImageService avatarService)
             : base(logger, mapper, service)
         {
             _avatarService = avatarService;
         }
 
-        // GET: api/v1/odata/Members
+        // GET: api/v1/odata/Members    x
         [HttpGet]
         public IActionResult Get()
         {
@@ -43,9 +46,8 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // GET api/v1/odata/Members(5)
-        [ODataRouteComponent(MembersWithIdRoute)]
-        [HttpGet(IdRoute)]
-        public IActionResult GetById([FromODataUri]int id)
+        [HttpGet(MembersWithIdRoute)]
+        public IActionResult GetById(int id)
         {
             try
             {
@@ -53,13 +55,12 @@ namespace CoralTime.Api.v1.Odata.Members
             }
             catch (Exception e)
             {
-                return SendErrorODataResponse(e);
+              return SendErrorODataResponse(e);
             }
         }
 
         // GET api/v1/odata/Members(2)/projects
-        [ODataRouteComponent(MembersRouteWithProjects)]
-        [HttpGet(IdRouteWithProjects)]
+        [HttpGet(MembersRouteWithProjects)]
         public IActionResult GetProjects([FromODataUri]int id)
         {
             try
@@ -68,7 +69,7 @@ namespace CoralTime.Api.v1.Odata.Members
             }
             catch (Exception e)
             {
-                return SendErrorODataResponse(e);
+               return SendErrorODataResponse(e);
             }
         }
 
@@ -79,7 +80,7 @@ namespace CoralTime.Api.v1.Odata.Members
         {
             if (!ModelState.IsValid)
             {
-                return SendInvalidModelResponse();
+                //return SendInvalidModelResponse();
             }
 
             var createdMemberView = await _service.CreateNewUser(memberView, GetBaseUrl());
@@ -90,13 +91,13 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // PUT: api/v1/odata/Members(1)
-        [ODataRouteComponent(MembersWithIdRoute)]
-        [HttpPut(IdRoute)]
-        public async Task<IActionResult> Update([FromODataUri]int id, [FromBody]MemberView memberView)
+      
+        [HttpPut(MembersWithIdRoute)]
+        public async Task<IActionResult> Update(int id, MemberView memberView)
         {
             if (!ModelState.IsValid)
             {
-                return SendInvalidModelResponse();
+               // return SendInvalidModelResponse();
             }
 
             memberView.Id = id;
@@ -112,9 +113,10 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         //DELETE :api/v1/odata/Members(1)
-        [ODataRouteComponent(MembersWithIdRoute)]
-        [HttpDelete(IdRoute)]
+        
+        [HttpDelete(MembersWithIdRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Delete([FromODataUri]int id) => BadRequest($"Can't delete the member with Id - {id}");
+
     }
 }

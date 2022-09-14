@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class TasksController : BaseODataController<TasksController, ITasksService>
     {
@@ -28,8 +28,7 @@ namespace CoralTime.Api.v1.Odata
         public IActionResult Get() => new ObjectResult(_service.Get());
 
         // GET api/v1/odata/Tasks(2)
-        [ODataRouteComponent(TasksWithIdRoute)]
-        [HttpGet(IdRoute)]
+        [HttpGet(TasksWithIdRoute)]
         public IActionResult GetById([FromODataUri]int id)
         {
             try
@@ -66,8 +65,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PUT api/v1/odata/Tasks(1)
-        [ODataRouteComponent(TasksWithIdRoute)]
-        [HttpPut(IdRoute)]
+        [HttpPut(TasksWithIdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
@@ -89,8 +87,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PATCH api/v1/odata/Tasks(1)
-        [ODataRouteComponent(TasksWithIdRoute)]
-        [HttpPatch(IdRoute)]
+        [HttpPatch(TasksWithIdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
@@ -113,8 +110,7 @@ namespace CoralTime.Api.v1.Odata
 
         //DELETE :api/v1/odata/Tasks(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRouteComponent(TasksWithIdRoute)]
-        [HttpDelete(IdRoute)]
+        [HttpDelete(TasksWithIdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {
             try

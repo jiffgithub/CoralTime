@@ -3,8 +3,7 @@ using CoralTime.ViewModels.Reports.Request.Grid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 using static CoralTime.Common.Constants.Constants.Routes;
 
 namespace CoralTime.Api.v1.Reports
@@ -27,11 +26,12 @@ namespace CoralTime.Api.v1.Reports
                 return BadRequest("Invalid Model");
             }
 
-            var jsonSerializatorSettings = new JsonSerializerSettings
+            var jsonSerializatorSettings = new JsonSerializerOptions
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
             };
+            
+            jsonSerializatorSettings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            jsonSerializatorSettings.IgnoreNullValues = true;
 
             _service.CheckAndSaveCurrentQuery(reportsGridView);
 

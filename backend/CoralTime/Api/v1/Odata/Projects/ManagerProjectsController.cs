@@ -10,7 +10,7 @@ using static CoralTime.Common.Constants.Constants.Routes.OData;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class ManagerProjectsController : BaseODataController<ManagerProjectsController, IProjectService>
     {
@@ -25,7 +25,7 @@ namespace CoralTime.Api.v1.Odata.Projects
             {
                 var projects = _service.ManageProjectsOfManager().Select(_mapper.Map<ProjectView, ManagerProjectsView>);
 
-                return Ok(projects);
+                return Ok(projects.ToList());
             }
             catch (Exception e)
             {

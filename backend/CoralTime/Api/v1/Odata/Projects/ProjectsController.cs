@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class ProjectsController : BaseODataController<ProjectsController, IProjectService>
     {
@@ -36,8 +36,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // GET api/v1/odata/Projects(2)
-        [ODataRouteComponent(ProjectsRouteWithMembers)]
-        [HttpGet(IdRouteWithMembers)]
+        [HttpGet(ProjectsRouteWithMembers)]
         public IActionResult GetMembers([FromODataUri] int id)
         {
             try
@@ -52,7 +51,6 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // GET api/v1/odata/Projects(2)
         [ODataRouteComponent(ProjectsWithIdRoute)]
-        [HttpGet(IdRoute)]
         public IActionResult GetById([FromODataUri]  int id)
         {
             try
@@ -90,8 +88,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PUT api/v1/odata/Projects(1)
-        [ODataRouteComponent(ProjectsWithIdRoute)]
-        [HttpPut(IdRoute)]
+        [HttpPut(ProjectsWithIdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]dynamic project)
         {
             if (!ModelState.IsValid)
@@ -113,8 +110,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PATCH api/v1/odata/Projects(1)
-        [ODataRouteComponent(ProjectsWithIdRoute)]
-        [HttpPatch(IdRoute)]
+        [HttpPatch(ProjectsWithIdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]dynamic project)
         {
             if (!ModelState.IsValid)
@@ -137,8 +133,7 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // DELETE api/v1/odata/Projects(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRouteComponent(ProjectsWithIdRoute)]
-        [HttpDelete(IdRoute)]
+        [HttpDelete(ProjectsWithIdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {
             return BadRequest($"Can't delete the project with Id - {id}");
