@@ -52,7 +52,5 @@ namespace CoralTime.DAL.Interfaces
         void Delete(TEntity entityToDelete);
 
         void DeleteRange(IEnumerable<TEntity> entitiesToDelete);
-
-        int ExecuteSqlCommand(string command, params object[] parameters);
     }
 }

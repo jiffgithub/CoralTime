@@ -23,9 +23,7 @@ using CoralTime.ViewModels.Tasks;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.Stores;
 using IdentityServer4.Validation;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,9 +42,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using IdentityServer4.Test;
 using Microsoft.IdentityModel.Tokens;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Microsoft.AspNetCore.OData.Routing;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoralTime
 {
@@ -97,9 +101,11 @@ namespace CoralTime
             services.AddMvc();
 
             // Add OData
-            services.AddOData();
+            services.AddControllers().AddOData(opt => opt.AddRouteComponents("v1",GetEdmModel()).Filter().Select().Expand());
             services.AddMvcCore(options =>
             {
+                options.EnableEndpointRouting = false;
+
                 foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
                 {
                     outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
@@ -112,7 +118,7 @@ namespace CoralTime
             SetupIdentity(services);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "CoralTime", Version = "v1" });
+                c.SwaggerDoc("v1",new Microsoft.OpenApi.Models.OpenApiInfo { Title = "CoralTime", Version = "v1" });
             });
             
             return services.BuildServiceProvider();
@@ -121,9 +127,6 @@ namespace CoralTime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-#if DEBUG
-            loggerFactory.AddConsole();
-#endif
 
             //add NLog to ASP.NET Core
             loggerFactory.AddNLog();
@@ -134,38 +137,24 @@ namespace CoralTime
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
 
             SetupAngularRouting(app);
 
-            app.UseDefaultFiles();
 
-            // Uses static file for the current path.
             app.UseStaticFiles();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
-                RequestPath = "/StaticFiles"
-            });
+
+            app.UseRouting();
+
 
             app.UseIdentityServer();
+
+            app.UseAuthorization();
 
             // Add middleware exceptions
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            // Add OData
-            var edmModel = SetupODataEntities(app.ApplicationServices);
-
-            app.UseMvc();
-
-            app.UseMvc(routeBuilder =>
-            {
-                routeBuilder.Count().Filter().OrderBy().Expand().Select().MaxTop(null);
-                routeBuilder.MapODataServiceRoute("ODataRoute", BaseODataRoute, edmModel);
-                routeBuilder.EnableDependencyInjection();
-            });
 
             app.UseCors("AllowAllOrigins");
 
@@ -176,6 +165,12 @@ namespace CoralTime
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoralTime V1");
             });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
 
             Constants.EnvName = env.EnvironmentName;
 
@@ -219,18 +214,18 @@ namespace CoralTime
 
         private static void SetupAngularRouting(IApplicationBuilder app)
         {
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path.HasValue && null != Constants.AngularRoutes.FirstOrDefault(ar => context.Request.Path.Value.StartsWith(ar, StringComparison.OrdinalIgnoreCase)))
-                {
-                    context.Request.Path = new PathString("/");
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Path.HasValue && null != Constants.AngularRoutes.FirstOrDefault(ar => context.Request.Path.Value.StartsWith(ar, StringComparison.OrdinalIgnoreCase)))
+            //    {
+            //        context.Request.Path = new PathString("/");
 
-                    context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
-                    context.Response.Headers.Add("Expires", "-1");
-                }
+            //        context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+            //        context.Response.Headers.Add("Expires", "-1");
+            //    }
 
-                await next();
-            });
+            //    await next();
+            //});
         }
 
         private void SetupIdentity(IServiceCollection services)
@@ -327,9 +322,9 @@ namespace CoralTime
             });
         }
 
-        private static IEdmModel SetupODataEntities(IServiceProvider serviceProvider)
+        private static IEdmModel GetEdmModel()
         {
-            var builder = new ODataConventionModelBuilder(serviceProvider);
+            ODataConventionModelBuilder builder = new ();
             builder.EntitySet<ClientView>("Clients");
             builder.EntitySet<ProjectView>("Projects");
             builder.EntitySet<MemberView>("Members");

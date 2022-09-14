@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -19,17 +20,17 @@ namespace CoralTime
 
         public static void Main(string[] args)
         {
-#if DEBUG
-            // Hide Kestrel console.
-            var hWnd = GetConsoleWindow();
-            if (hWnd != IntPtr.Zero)
-            {
-                ShowWindow(hWnd, 0);
-            }
+//#if DEBUG
+//            // Hide Kestrel console.
+//            var hWnd = GetConsoleWindow();
+//            if (hWnd != IntPtr.Zero)
+//            {
+//                ShowWindow(hWnd, 0);
+//            }
 
-            // Run application at browser tab instead of new window.
-            Process.Start(new ProcessStartInfo("cmd", "/c start http://localhost:5000"));
-#endif
+//            // Run application at browser tab instead of new window.
+//            Process.Start(new ProcessStartInfo("cmd", "/c start https://localhost:5001"));
+//#endif
 
             BuildWebHost(args).Run();
         }
@@ -50,7 +51,7 @@ namespace CoralTime
 
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                          .AddJsonFile("defaultDbData.json", optional: true); 
+                          .AddJsonFile("defaultDbData.json", optional: true);
 
                     if (env.IsDevelopment())
                     {
@@ -74,11 +75,7 @@ namespace CoralTime
                     logging.AddConsole();
                     logging.AddDebug();
                 })
-                .UseIISIntegration()
-                .UseDefaultServiceProvider((context, options) =>
-                {
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                });
+                .UseIISIntegration();
 
             return builder;
         }

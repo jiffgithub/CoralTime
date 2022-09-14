@@ -1,7 +1,7 @@
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.Projects;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +9,8 @@ using System;
 using static CoralTime.Common.Constants.Constants;
 using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
@@ -34,7 +36,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // GET api/v1/odata/Projects(2)
-        [ODataRoute(ProjectsRouteWithMembers)]
+        [ODataRouteComponent(ProjectsRouteWithMembers)]
         [HttpGet(IdRouteWithMembers)]
         public IActionResult GetMembers([FromODataUri] int id)
         {
@@ -49,7 +51,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // GET api/v1/odata/Projects(2)
-        [ODataRoute(ProjectsWithIdRoute)]
+        [ODataRouteComponent(ProjectsWithIdRoute)]
         [HttpGet(IdRoute)]
         public IActionResult GetById([FromODataUri]  int id)
         {
@@ -88,7 +90,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PUT api/v1/odata/Projects(1)
-        [ODataRoute(ProjectsWithIdRoute)]
+        [ODataRouteComponent(ProjectsWithIdRoute)]
         [HttpPut(IdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]dynamic project)
         {
@@ -111,7 +113,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PATCH api/v1/odata/Projects(1)
-        [ODataRoute(ProjectsWithIdRoute)]
+        [ODataRouteComponent(ProjectsWithIdRoute)]
         [HttpPatch(IdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]dynamic project)
         {
@@ -135,7 +137,7 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // DELETE api/v1/odata/Projects(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRoute(ProjectsWithIdRoute)]
+        [ODataRouteComponent(ProjectsWithIdRoute)]
         [HttpDelete(IdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {

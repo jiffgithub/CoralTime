@@ -1,8 +1,8 @@
 using AutoMapper;
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.Tasks;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +10,8 @@ using System;
 using static CoralTime.Common.Constants.Constants;
 using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata
 {
@@ -26,7 +28,7 @@ namespace CoralTime.Api.v1.Odata
         public IActionResult Get() => new ObjectResult(_service.Get());
 
         // GET api/v1/odata/Tasks(2)
-        [ODataRoute(TasksWithIdRoute)]
+        [ODataRouteComponent(TasksWithIdRoute)]
         [HttpGet(IdRoute)]
         public IActionResult GetById([FromODataUri]int id)
         {
@@ -64,7 +66,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PUT api/v1/odata/Tasks(1)
-        [ODataRoute(TasksWithIdRoute)]
+        [ODataRouteComponent(TasksWithIdRoute)]
         [HttpPut(IdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
@@ -87,7 +89,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PATCH api/v1/odata/Tasks(1)
-        [ODataRoute(TasksWithIdRoute)]
+        [ODataRouteComponent(TasksWithIdRoute)]
         [HttpPatch(IdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
@@ -111,7 +113,7 @@ namespace CoralTime.Api.v1.Odata
 
         //DELETE :api/v1/odata/Tasks(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRoute(TasksWithIdRoute)]
+        [ODataRouteComponent(TasksWithIdRoute)]
         [HttpDelete(IdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {

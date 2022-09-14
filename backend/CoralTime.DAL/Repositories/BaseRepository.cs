@@ -238,11 +238,6 @@ namespace CoralTime.DAL.Repositories
             }
         }
 
-        public int ExecuteSqlCommand(string command, params object[] parameters)
-        {
-            return _db.Database.ExecuteSqlCommand(command, parameters);
-        }
-
         #endregion
     }
 }

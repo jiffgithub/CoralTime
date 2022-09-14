@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using CoralTime.Common.Middlewares;
 using CoralTime.ViewModels.Errors;
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

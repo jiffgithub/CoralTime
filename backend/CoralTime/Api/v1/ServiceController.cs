@@ -32,7 +32,7 @@ namespace CoralTime.Api.v1
         // GET api/v1/Service/UpdateManagerRoles
         [HttpGet]
         [Route(UpdateManagerRolesRoute)]
-        public ActionResult UpdateManagerRoles()
+        public Microsoft.AspNetCore.Mvc.ActionResult UpdateManagerRoles()
         {
             var result = _roleService.FixAllManagerRoles();
             return Ok(result);
@@ -41,7 +41,7 @@ namespace CoralTime.Api.v1
         // GET api/v1/Service/UpdateClaims
         [HttpGet]
         [Route(UpdateClaimsRoute)]
-        public ActionResult UpdateClaims()
+        public Microsoft.AspNetCore.Mvc.ActionResult UpdateClaims()
         {
             _service.UpdateUsersClaims();
             return Ok(true);
@@ -49,7 +49,7 @@ namespace CoralTime.Api.v1
 
         [HttpGet]
         [Route(RefreshDataBaseRoute)]
-        public async Task<ActionResult>RefreshDataBase()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RefreshDataBase()
         {
             await _refreshDataBaseService.RefreshDataBase();
             return Ok(true);
@@ -58,7 +58,7 @@ namespace CoralTime.Api.v1
         // GET api/v1/Service/SaveImagesFromDbToStaticFiles
         [HttpGet]
         [Route(SaveImagesFromDbToStaticFilesRoute)]
-        public ActionResult SaveImagesFromDbToStaticFiles()
+        public Microsoft.AspNetCore.Mvc.ActionResult SaveImagesFromDbToStaticFiles()
         {
             _avatarService.SaveImagesFromDbToFolder();
             return Ok();

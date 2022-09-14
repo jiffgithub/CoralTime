@@ -37,10 +37,10 @@ namespace CoralTime.DAL.Repositories
 
             _userId = httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Properties.FirstOrDefault().Value == JwtClaimTypes.Subject)?.Value;
 
-            ApplicationUserCurrent = GetUserCurrent();
-            ApplicationUserImpersonated = GetUserImpersonated();
-            MemberCurrent = GetMemberCurrent();
-            MemberImpersonated = GetMemberImpersonated();
+            //ApplicationUserCurrent = GetUserCurrent();
+            //ApplicationUserImpersonated = GetUserImpersonated();
+            //MemberCurrent = GetMemberCurrent();
+            //MemberImpersonated = GetMemberImpersonated();
         }
 
         #region Get and check ApplicationUser and Member by Current and Impersonated roles;
