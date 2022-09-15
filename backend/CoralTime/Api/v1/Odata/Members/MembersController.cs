@@ -74,7 +74,7 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // POST: api/v1/odata/Members
-        [HttpPost]
+        [HttpPost(MemberRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public async Task<IActionResult> Create([FromBody] MemberView memberView)
         {

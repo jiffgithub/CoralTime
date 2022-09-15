@@ -139,7 +139,7 @@ namespace CoralTime
                 app.UseDeveloperExceptionPage();
             }
 
-            SetupAngularRouting(app);
+           // SetupAngularRouting(app);
 
             app.UseDefaultFiles();
 
@@ -152,7 +152,7 @@ namespace CoralTime
                 RequestPath = "/StaticFiles"
             });
 
-           
+
             app.UseIdentityServer();
 
             // Add middleware exceptions
@@ -185,7 +185,7 @@ namespace CoralTime
 
             Constants.EnvName = env.EnvironmentName;
 
-            CombineFileWkhtmltopdf(env);
+            //CombineFileWkhtmltopdf(env);
 
             AppDbContext.InitializeFirstTimeDataBaseAsync(app.ApplicationServices, Configuration).Wait();
         }

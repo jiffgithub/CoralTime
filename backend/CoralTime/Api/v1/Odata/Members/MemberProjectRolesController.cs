@@ -78,7 +78,7 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // POST: api/v1/odata/MemberProjectRoles
-        [HttpPost]
+        [HttpPost(MemberProjecRolestRoute)]
         public IActionResult Create([FromBody]MemberProjectRoleView projectRole)
         {
             try

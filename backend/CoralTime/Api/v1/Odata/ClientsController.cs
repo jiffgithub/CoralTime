@@ -35,7 +35,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // POST: api/v1/odata/Clients
-        [HttpPost]
+        [HttpPost(ClientsRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Create([FromBody] ClientView clientData)
         {

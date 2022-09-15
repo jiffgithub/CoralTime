@@ -1,5 +1,4 @@
 ﻿using CoralTime.ViewModels.DateFormat;
-using CoralTime.ViewModels.Reports.Responce.DropDowns.GroupBy;
 using System;
 using System.Collections.Generic;
 
@@ -88,14 +87,18 @@ namespace CoralTime.Common.Constants
             public static class OData
             {
                 public const string BaseODataRoute = "api/v1/odata";
-                public const string BaseODataControllerRoute = BaseODataRoute + "/[controller]";
-                public const string TasksWithIdRoute = BaseODataRoute + "/Tasks(" + IdRoute + ")";
-                public const string ClientsWithIdRoute = BaseODataRoute + "/Clients(" + IdRoute + ")";
-                public const string ProjectsWithIdRoute = BaseODataRoute + "/Projects(" + IdRoute + ")";
+                public const string TasksRoute = BaseODataRoute + "/Tasks";
+                public const string TasksWithIdRoute = $"{TasksRoute}({IdRoute})";
+                public const string ClientsRoute = BaseODataRoute + "/Clients";
+                public const string ClientsWithIdRoute = $"{ClientsRoute}({IdRoute})";
+                public const string ProjectsRoute = BaseODataRoute + "/Projects";
+                public const string ProjectsWithIdRoute = $"{ProjectsRoute}({IdRoute})";
                 public const string ProjectsRouteWithMembers = ProjectsWithIdRoute + WithMembers;
-                public const string MembersWithIdRoute = BaseODataRoute + "/Members(" + IdRoute + ")";
+                public const string MembersRoute = BaseODataRoute + "/Members";
+                public const string MembersWithIdRoute = $"{MembersRoute}({IdRoute})";
                 public const string MembersRouteWithProjects = MembersWithIdRoute + WithProjects;
-                public const string MemberProjectRolesWithIdRoute = BaseODataRoute + "/MemberProjectRoles(" + IdRoute + ")";
+                public const string MemberProjecRolestRoute = BaseODataRoute + "/MemberProjectRoles";
+                public const string MemberProjectRolesWithIdRoute = $"{MemberProjecRolestRoute}({IdRoute})";
                 public const string MemberProjectRolesRouteWithProjects = MemberProjectRolesWithIdRoute + WithProjects;
                 public const string MemberProjectRolesRouteWithMembers = MemberProjectRolesWithIdRoute + WithMembers;
             }

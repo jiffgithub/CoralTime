@@ -43,7 +43,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // POST api/v1/odata/Tasks
-        [HttpPost]
+        [HttpPost(TasksRoute)]
         public IActionResult Create([FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
