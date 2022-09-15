@@ -139,6 +139,7 @@ namespace CoralTime
                 app.UseDeveloperExceptionPage();
             }
 
+            SetupAngularRouting(app);
 
             app.UseDefaultFiles();
 
