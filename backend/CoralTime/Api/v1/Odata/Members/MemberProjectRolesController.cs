@@ -1,20 +1,16 @@
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.MemberProjectRoles;
-using Microsoft.AspNetCore.OData;
-using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
-using Microsoft.AspNetCore.OData.Routing.Attributes;
 
 using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata.Members
 {
-    
+
     [Authorize]
     public class MemberProjectRolesController : BaseODataController<MemberProjectRolesController, IMemberProjectRoleService>
     {
@@ -78,7 +74,7 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // POST: api/v1/odata/MemberProjectRoles
-        [HttpPost(MemberProjecRolestRoute)]
+        [HttpPost(MemberProjecRolesRoute)]
         public IActionResult Create([FromBody]MemberProjectRoleView projectRole)
         {
             try

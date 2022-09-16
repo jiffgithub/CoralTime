@@ -1,20 +1,17 @@
 using CoralTime.BL.Interfaces;
-using CoralTime.ViewModels.Projects;
-using Microsoft.AspNetCore.OData;
-using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 using static CoralTime.Common.Constants.Constants;
-using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
-using Microsoft.AspNetCore.OData.Routing.Attributes;
-using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
-    
+
     [Authorize]
     public class ProjectsController : BaseODataController<ProjectsController, IProjectService>
     {
@@ -66,8 +63,8 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // POST api/v1/odata/Projects
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [HttpPost(ProjectsWithIdRoute)]
-        public IActionResult Create([FromBody]dynamic projectData)
+        [HttpPost(ProjectsRoute)]
+        public IActionResult Create([FromBody] dynamic projectData)
         {
             if (!ModelState.IsValid)
             {
@@ -96,11 +93,9 @@ namespace CoralTime.Api.v1.Odata.Projects
                 SendInvalidModelResponse();
             }
 
-            project.Id = id;
-
             try
             {
-                var result = _service.Update(project);
+                var result = _service.Update(id, project);
                 return new ObjectResult(result);
             }
             catch (Exception e)
@@ -118,11 +113,9 @@ namespace CoralTime.Api.v1.Odata.Projects
                 SendInvalidModelResponse();
             }
 
-            project.Id = id;
-
             try
             {
-                var result = _service.Patch(project);
+                var result = _service.Patch(id, project);
                 return new ObjectResult(result);
             }
             catch (Exception e)

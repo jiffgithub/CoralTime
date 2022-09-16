@@ -1,8 +1,6 @@
 ﻿using CoralTime.BL.Interfaces;
 using CoralTime.Common.Exceptions;
 using CoralTime.ViewModels.Vsts;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,7 +12,6 @@ using static CoralTime.Common.Constants.Constants.Routes.OData;
 
 namespace CoralTime.Api.v1.Odata
 {
-    [Route(BaseODataControllerRoute)]
     [Authorize(Roles = ApplicationRoleAdmin)]
     public class VstsProjectIntegrationController : BaseODataController<VstsProjectIntegrationController, IVstsService>
     {
@@ -31,9 +28,9 @@ namespace CoralTime.Api.v1.Odata
         public IActionResult Get() => new ObjectResult(_service.Get());
 
         // GET api/v1/odata/VstsProjectIntegration(2)/members
-        [ODataRoute(VstsProjectIntegrationMembersByProject)]
-        [HttpGet(IdRouteWithMembers)]
-        public IActionResult GetNotAssignMembersAtProjByProjectId([FromODataUri] int id)
+     
+        [HttpGet(VstsProjectIntegrationMembersByProject)]
+        public IActionResult GetNotAssignMembersAtProjByProjectId(int id)
         {
             try
             {
@@ -46,7 +43,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // POST api/v1/odata/VstsProjectIntegration
-        [HttpPost]
+        [HttpPost(VstsProjectIntegrationRoute)]
         public IActionResult Create([FromBody]VstsProjectIntegrationView vstsProjectIntegrationView)
         {
             if (!ModelState.IsValid)
@@ -71,9 +68,8 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PUT api/v1/odata/VstsProjectIntegration(1)
-        [ODataRoute(VstsProjectIntegrationWithIdRoute)]
-        [HttpPut(IdRoute)]
-        public IActionResult Update([FromODataUri] int id, [FromBody]VstsProjectIntegrationView vstsProjectIntegrationView)
+        [HttpPut(VstsProjectIntegrationRoute)]
+        public IActionResult Update(int id, [FromBody]VstsProjectIntegrationView vstsProjectIntegrationView)
         {
             if (!ModelState.IsValid)
             {
@@ -97,9 +93,8 @@ namespace CoralTime.Api.v1.Odata
         }
 
         //DELETE :api/v1/odata/VstsProjectIntegration(1)
-        [ODataRoute(VstsProjectIntegrationWithIdRoute)]
-        [HttpDelete(IdRoute)]
-        public IActionResult Delete([FromODataUri] int id)
+        [HttpDelete(VstsProjectIntegrationRoute)]
+        public IActionResult Delete(int id)
         {
             try
             {

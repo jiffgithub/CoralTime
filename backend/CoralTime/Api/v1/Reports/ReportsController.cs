@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Text.Json;
 using static CoralTime.Common.Constants.Constants.Routes;
 
 namespace CoralTime.Api.v1.Reports
@@ -30,9 +32,7 @@ namespace CoralTime.Api.v1.Reports
                 return BadRequest("Invalid Model");
             }
 
-            var jsonSerializatorSettings = new JsonSerializerOptions
-            {
-            };
+            var jsonSerializatorSettings = new JsonSerializerOptions();
             
             jsonSerializatorSettings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             jsonSerializatorSettings.IgnoreNullValues = true;

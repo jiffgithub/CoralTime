@@ -9,7 +9,6 @@ using CoralTime.Common.Middlewares;
 using CoralTime.DAL;
 using CoralTime.DAL.Mapper;
 using CoralTime.DAL.Models;
-using CoralTime.DAL.PersistedGrantStore;
 using CoralTime.DAL.Repositories;
 using CoralTime.Services;
 using CoralTime.ViewModels.Clients;
@@ -20,9 +19,7 @@ using CoralTime.ViewModels.ProjectRole;
 using CoralTime.ViewModels.Projects;
 using CoralTime.ViewModels.Settings;
 using CoralTime.ViewModels.Tasks;
-using IdentityModel;
 using IdentityServer4.EntityFramework.Interfaces;
-using IdentityServer4.Stores;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -41,7 +38,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using NPOI.SS.Formula.Functions;
 using System;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
@@ -51,8 +47,6 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using CoralTime.BL.Services.Notifications;
 using CoralTime.ViewModels.MemberActions;
-using Microsoft.IdentityModel.Tokens;
-using static CoralTime.Common.Constants.Constants.Routes.OData;
 using Microsoft.IdentityModel.Logging;
 using CoralTime.ViewModels.Vsts;
 using System.Threading.Tasks;
@@ -68,7 +62,7 @@ namespace CoralTime
 
         private IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             bool.TryParse(Configuration["UseMySql"], out var useMySql);
             if (useMySql)
@@ -127,23 +121,22 @@ namespace CoralTime
                 {
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
-            })
-            .AddJsonOptions(options =>
-            {
-                options.SerializerSettings.Converters.Insert(0, new TrimmingStringConverter());
             });
+            //.AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.Converters.Insert(0, new TrimmingStringConverter());
+            //});
 
             SetupIdentity(services);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1",new Microsoft.OpenApi.Models.OpenApiInfo { Title = "CoralTime", Version = "v1" });
             });
-            
-            return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        [Obsolete]
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
             if (env.IsDevelopment())
@@ -151,15 +144,7 @@ namespace CoralTime
                 app.UseDeveloperExceptionPage();
             }
 
-            // Disable ApplicationInsights messages if it isn't configured
-            var IsApplicationInsights = Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey") != null;
-            if (!IsApplicationInsights)
-            {
-                var configuration = app.ApplicationServices.GetService<Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration>();
-                configuration.DisableTelemetry = true;
-            }
-
-            SetupAngularRouting(app);
+            //SetupAngularRouting(app);
 
             app.UseDefaultFiles();
 
@@ -178,8 +163,6 @@ namespace CoralTime
             // Add middleware exceptions
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            // Add OData
-            var edmModel = SetupODataEntities(app.ApplicationServices);
 
             //Make sure you add app.UseCors before app.UseMvc otherwise the request will be finished before the CORS middleware is applied
             app.UseCors("AllowAllOrigins");
@@ -191,7 +174,6 @@ namespace CoralTime
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoralTime V1");
             });
-
 
             app.UseAuthentication();
 

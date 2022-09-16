@@ -8,7 +8,6 @@ using static CoralTime.Common.Constants.Constants.Routes.OData;
 
 namespace CoralTime.Api.v1.Odata
 {
-    [Route(BaseODataControllerRoute)]
     [Authorize(Roles = ApplicationRoleAdmin)]
     public class MemberActionsController : BaseODataController<MemberActionsController, IMemberActionService>
     {

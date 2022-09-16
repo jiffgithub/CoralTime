@@ -8,9 +8,14 @@ using CoralTime.DAL.Models;
 using CoralTime.DAL.Repositories;
 using CoralTime.ViewModels.Member;
 using CoralTime.ViewModels.Projects;
+using IdentityModel.Client;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Text.Json;
 
 namespace CoralTime.BL.Services
 {
@@ -126,18 +131,19 @@ namespace CoralTime.BL.Services
             return memberView;
         }
 
-        public ProjectView Create(dynamic projectView)
+        public ProjectView Create(JsonElement projectView)
         {
-            var localName = (string) projectView.name;
+
+            var localName = projectView.GetProperty("name").GetString();
             var isNameUnique = Uow.ProjectRepository.LinkedCacheGetByName(localName) == null;
 
             var project = Mapper.Map<ProjectView, Project>(new ProjectView
             {
-                ClientId = projectView.clientId,
-                Color = projectView.color,
-                IsActive = projectView.isActive,
-                Name = projectView.name,
-                ClientIsActive = projectView.clientIsActive
+                ClientId = projectView.GetProperty("clientId").GetInt32(),
+                Color = projectView.GetProperty("clientId").GetInt32(),
+                IsActive = projectView.GetProperty("isActive").GetBoolean(),
+                Name = projectView.GetProperty("name").GetString(),
+                ClientIsActive = projectView.GetProperty("clientIsActive").GetBoolean()
             });
 
             project.IsActive = true;
@@ -155,25 +161,27 @@ namespace CoralTime.BL.Services
         }
 
         // TODO remove dynamic!
-        public ProjectView Update(dynamic projectView)
+        public ProjectView Update(int id, JsonElement projectView)
         {
-            var projectById = Uow.ProjectRepository.GetById((int)projectView.Id);
+           
+            var projectById = Uow.ProjectRepository.GetById(id);
 
             if (projectById == null)
             {
-                throw new CoralTimeEntityNotFoundException($"Project with id = {projectView.Id} not found.");
+                throw new CoralTimeEntityNotFoundException($"Project with id = {id} not found.");
             }
 
             return CommonLogicForPatchUpdateMethods(projectView, projectById);
         }
 
         // TODO remove dynamic!
-        public ProjectView Patch(dynamic projectView)
+        public ProjectView Patch(int id, JsonElement projectView)
         {
-            var projectById = Uow.ProjectRepository.GetById((int)projectView.Id);
+            var projectById = Uow.ProjectRepository.GetById(id);
+
             if (projectById == null)
             {
-                throw new CoralTimeEntityNotFoundException($"Project with id = {projectView.Id} not found.");
+                throw new CoralTimeEntityNotFoundException($"Project with id = {id} not found.");
             }
 
             // Don't activate project if client is Inactive.
@@ -221,8 +229,12 @@ namespace CoralTime.BL.Services
             return projects;
         }
 
-        private ProjectView CommonLogicForPatchUpdateMethods(dynamic projectView, Project projectById)
+        private ProjectView CommonLogicForPatchUpdateMethods(JsonElement projectViewElement, Project projectById)
         {
+
+            var expConverter = new ExpandoObjectConverter();
+            dynamic projectView = JsonConvert.DeserializeObject<ExpandoObject>(projectViewElement.GetRawText(), expConverter);
+
             var newProjectName = (string)projectView.name;
 
             var isNameUnique = Uow.ProjectRepository.LinkedCacheGetByName(newProjectName) == null || projectById.Name == newProjectName;

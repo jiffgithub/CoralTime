@@ -8,7 +8,6 @@ using static CoralTime.Common.Constants.Constants.Routes;
 
 namespace CoralTime.Api.v1
 {
-    [Route(BaseControllerRoute)]
     [Authorize(Roles = ApplicationRoleAdmin)]
     public class AdminController : BaseController<AdminController, IAdminService>
     {

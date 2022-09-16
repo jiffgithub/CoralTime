@@ -108,12 +108,13 @@ namespace CoralTime.Common.Constants
                 public const string MembersRoute = BaseODataRoute + "/Members";
                 public const string MembersWithIdRoute = $"{MembersRoute}({IdRoute})";
                 public const string MembersRouteWithProjects = MembersWithIdRoute + WithProjects;
-                public const string MemberProjecRolestRoute = BaseODataRoute + "/MemberProjectRoles";
-                public const string MemberProjectRolesWithIdRoute = $"{MemberProjecRolestRoute}({IdRoute})";
+                public const string MemberProjecRolesRoute = BaseODataRoute + "/MemberProjectRoles";
+                public const string MemberProjectRolesWithIdRoute = $"{MemberProjecRolesRoute}({IdRoute})";
                 public const string MemberProjectRolesRouteWithProjects = MemberProjectRolesWithIdRoute + WithProjects;
                 public const string MemberProjectRolesRouteWithMembers = MemberProjectRolesWithIdRoute + WithMembers;
-                public const string VstsProjectIntegrationWithIdRoute = "VstsProjectIntegration(" + IdRoute + ")";
-                public const string VstsProjectIntegrationMembersByProject = "VstsProjectIntegration(" + IdRoute + ")" + WithMembers;
+                public const string VstsProjectIntegrationRoute = BaseODataRoute + "/VstsProjectIntegration";
+                public const string VstsProjectIntegrationWithIdRoute = $"{VstsProjectIntegrationRoute}({IdRoute})";
+                public const string VstsProjectIntegrationMembersByProject = VstsProjectIntegrationWithIdRoute + WithMembers;
             }
         }
 
