@@ -22,13 +22,13 @@ namespace CoralTime.Api.v1
         }
 
         [HttpGet(ProjectsRoute)]
-        public ActionResult GetMemberProjects() => new JsonResult(_service.GetMemberProjects());
+        public Microsoft.AspNetCore.Mvc.ActionResult GetMemberProjects() => new JsonResult(_service.GetMemberProjects());
 
         [HttpGet(DateFormatsRoute)]
         public IActionResult GetDateFormats() => new JsonResult(_service.GetDateFormats());
 
         [HttpGet(ProjectMembersWithIdRoute)]
-        public ActionResult GetProjectMembers(int id) => Ok(_service.GetProjectMembers(id));
+        public Microsoft.AspNetCore.Mvc.ActionResult GetProjectMembers(int id) => Ok(_service.GetProjectMembers(id));
 
         #region Notifications Preferences PersonalInfo
 

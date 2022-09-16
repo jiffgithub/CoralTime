@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -19,8 +21,8 @@ namespace CoralTime
 
         public static void Main(string[] args)
         {
-#if DEBUG
-            // Hide Kestrel console.
+            //#if DEBUG
+            //            // Hide Kestrel console.
             var hWnd = GetConsoleWindow();
             if (hWnd != IntPtr.Zero)
             {
@@ -28,8 +30,8 @@ namespace CoralTime
             }
 
             // Run application at browser tab instead of new window.
-            Process.Start(new ProcessStartInfo("cmd", "/c start http://localhost:5000"));
-#endif
+            Process.Start(new ProcessStartInfo("cmd", "/c start http://localhost:5001"));
+            //#endif
 
             BuildWebHost(args).Run();
         }
@@ -51,7 +53,7 @@ namespace CoralTime
 
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                          .AddJsonFile("defaultDbData.json", optional: true); 
+                          .AddJsonFile("defaultDbData.json", optional: true);
 
                     if (env.IsDevelopment())
                     {
@@ -78,10 +80,8 @@ namespace CoralTime
                     logging.AddDebug();
                 })
                 .UseIISIntegration()
-                .UseDefaultServiceProvider((context, options) =>
-                {
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                });
+                .UseNLog();
+
 
             return builder;
         }

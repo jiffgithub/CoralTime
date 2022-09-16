@@ -8,7 +8,7 @@ using static CoralTime.Common.Constants.Constants;
 namespace CoralTime.Api.v1
 {
     [Route(BaseControllerRoute)]
-    public class TestController : Controller
+    public class TestController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly UnitOfWork _uow;
 

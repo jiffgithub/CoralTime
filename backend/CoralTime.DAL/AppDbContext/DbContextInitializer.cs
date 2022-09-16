@@ -76,7 +76,7 @@ namespace CoralTime.DAL
 
                 await InitializeRoles();
                 await InitializeProjectRoles();
-                await InitializeSettings();
+                //await InitializeSettings();
 
                 if (bool.Parse(Configuration["AddTasks"]))
                 {

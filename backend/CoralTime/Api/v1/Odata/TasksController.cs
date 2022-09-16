@@ -1,7 +1,7 @@
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.Tasks;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,10 +9,12 @@ using System;
 using static CoralTime.Common.Constants.Constants;
 using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class TasksController : BaseODataController<TasksController, ITasksService>
     {
@@ -25,8 +27,7 @@ namespace CoralTime.Api.v1.Odata
         public IActionResult Get() => new ObjectResult(_service.Get());
 
         // GET api/v1/odata/Tasks(2)
-        [ODataRoute(TasksWithIdRoute)]
-        [HttpGet(IdRoute)]
+        [HttpGet(TasksWithIdRoute)]
         public IActionResult GetById([FromODataUri]int id)
         {
             try
@@ -41,7 +42,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // POST api/v1/odata/Tasks
-        [HttpPost]
+        [HttpPost(TasksRoute)]
         public IActionResult Create([FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
@@ -63,8 +64,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PUT api/v1/odata/Tasks(1)
-        [ODataRoute(TasksWithIdRoute)]
-        [HttpPut(IdRoute)]
+        [HttpPut(TasksWithIdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
@@ -86,8 +86,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PATCH api/v1/odata/Tasks(1)
-        [ODataRoute(TasksWithIdRoute)]
-        [HttpPatch(IdRoute)]
+        [HttpPatch(TasksWithIdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]TaskTypeView taskTypeView)
         {
             if (!ModelState.IsValid)
@@ -110,8 +109,7 @@ namespace CoralTime.Api.v1.Odata
 
         //DELETE :api/v1/odata/Tasks(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRoute(TasksWithIdRoute)]
-        [HttpDelete(IdRoute)]
+        [HttpDelete(TasksWithIdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {
             try

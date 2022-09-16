@@ -1,7 +1,7 @@
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.Clients;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,10 +9,11 @@ using System;
 using static CoralTime.Common.Constants.Constants;
 using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class ClientsController : BaseODataController<ClientsController, IClientService>
     {
@@ -34,7 +35,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // POST: api/v1/odata/Clients
-        [HttpPost]
+        [HttpPost(ClientsRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Create([FromBody] ClientView clientData)
         {
@@ -52,8 +53,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // GET api/v1/odata/Clients(2)
-        [ODataRoute(ClientsWithIdRoute)]
-        [HttpGet(IdRoute)]
+        [HttpGet(ClientsWithIdRoute)]
         public IActionResult GetById([FromODataUri] int id)
         {
             try
@@ -68,8 +68,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PUT: api/v1/odata/Clients(2)
-        [ODataRoute(ClientsWithIdRoute)]
-        [HttpPut(IdRoute)]
+        [HttpPut(ClientsWithIdRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Update([FromODataUri]int id, [FromBody]dynamic clientData)
         {
@@ -87,8 +86,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         // PATCH: api/v1/odata/Clients(30)
-        [ODataRoute(ClientsWithIdRoute)]
-        [HttpPatch(IdRoute)]
+        [HttpPatch(ClientsWithIdRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Patch([FromODataUri]int id, [FromBody]dynamic clientData)
         {
@@ -106,8 +104,7 @@ namespace CoralTime.Api.v1.Odata
         }
 
         //DELETE :api/v1/odata/Clients(1)
-        [HttpDelete(IdRoute)]
-        [ODataRoute(ClientsWithIdRoute)]
+        [HttpDelete(ClientsWithIdRoute)]
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Delete([FromODataUri]int id)
         {

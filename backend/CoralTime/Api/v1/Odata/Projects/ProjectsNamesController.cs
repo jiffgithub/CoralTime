@@ -7,7 +7,7 @@ using static CoralTime.Common.Constants.Constants.Routes.OData;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class ProjectsNamesController : BaseODataController<ProjectsNamesController, IProjectService>
     {

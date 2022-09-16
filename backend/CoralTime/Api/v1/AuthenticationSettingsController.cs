@@ -19,7 +19,7 @@ namespace CoralTime.Api.v1
 
         // GET api/v1/AuthenticationSettings
         [HttpGet]
-        public ActionResult GetSettings()
+        public Microsoft.AspNetCore.Mvc.ActionResult GetSettings()
         {
             try
             {

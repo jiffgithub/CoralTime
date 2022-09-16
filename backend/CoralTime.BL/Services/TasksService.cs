@@ -165,6 +165,7 @@ namespace CoralTime.BL.Services
         {
             var isNameUnique = Uow.TaskTypeRepository.LinkedCacheGetList()
                                    .FirstOrDefault(task => task.IsActive && task.Name == taskTypeView.Name 
+                                                                         && task.Id != taskTypeView.Id
                                                                          && (task.ProjectId == taskTypeView.ProjectId || task.ProjectId == null)) == null;
 
             if (!isNameUnique)

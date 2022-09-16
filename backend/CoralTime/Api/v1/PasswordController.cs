@@ -28,7 +28,7 @@ namespace CoralTime.Api.v1
 
         //Post: api/v1/Password/2
         [Authorize(Policy = ApplicationRoleAdmin)]
-        [HttpPost]
+        [HttpPost()]
         [Route(IdRoute)]
         public async Task<IActionResult> ResetPasswordAsync(int id)
         {

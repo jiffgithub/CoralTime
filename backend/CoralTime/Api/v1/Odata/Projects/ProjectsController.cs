@@ -1,7 +1,7 @@
 using CoralTime.BL.Interfaces;
 using CoralTime.ViewModels.Projects;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,10 +9,12 @@ using System;
 using static CoralTime.Common.Constants.Constants;
 using static CoralTime.Common.Constants.Constants.Routes;
 using static CoralTime.Common.Constants.Constants.Routes.OData;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
+using Microsoft.AspNetCore.OData.Formatter;
 
 namespace CoralTime.Api.v1.Odata.Projects
 {
-    [Route(BaseODataControllerRoute)]
+    
     [Authorize]
     public class ProjectsController : BaseODataController<ProjectsController, IProjectService>
     {
@@ -34,8 +36,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // GET api/v1/odata/Projects(2)
-        [ODataRoute(ProjectsRouteWithMembers)]
-        [HttpGet(IdRouteWithMembers)]
+        [HttpGet(ProjectsRouteWithMembers)]
         public IActionResult GetMembers([FromODataUri] int id)
         {
             try
@@ -49,8 +50,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // GET api/v1/odata/Projects(2)
-        [ODataRoute(ProjectsWithIdRoute)]
-        [HttpGet(IdRoute)]
+        [ODataRouteComponent(ProjectsWithIdRoute)]
         public IActionResult GetById([FromODataUri]  int id)
         {
             try
@@ -66,7 +66,7 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // POST api/v1/odata/Projects
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [HttpPost]
+        [HttpPost(ProjectsWithIdRoute)]
         public IActionResult Create([FromBody]dynamic projectData)
         {
             if (!ModelState.IsValid)
@@ -88,8 +88,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PUT api/v1/odata/Projects(1)
-        [ODataRoute(ProjectsWithIdRoute)]
-        [HttpPut(IdRoute)]
+        [HttpPut(ProjectsWithIdRoute)]
         public IActionResult Update([FromODataUri] int id, [FromBody]dynamic project)
         {
             if (!ModelState.IsValid)
@@ -111,8 +110,7 @@ namespace CoralTime.Api.v1.Odata.Projects
         }
 
         // PATCH api/v1/odata/Projects(1)
-        [ODataRoute(ProjectsWithIdRoute)]
-        [HttpPatch(IdRoute)]
+        [HttpPatch(ProjectsWithIdRoute)]
         public IActionResult Patch([FromODataUri] int id, [FromBody]dynamic project)
         {
             if (!ModelState.IsValid)
@@ -135,8 +133,7 @@ namespace CoralTime.Api.v1.Odata.Projects
 
         // DELETE api/v1/odata/Projects(1)
         [Authorize(Roles = ApplicationRoleAdmin)]
-        [ODataRoute(ProjectsWithIdRoute)]
-        [HttpDelete(IdRoute)]
+        [HttpDelete(ProjectsWithIdRoute)]
         public IActionResult Delete([FromODataUri] int id)
         {
             return BadRequest($"Can't delete the project with Id - {id}");

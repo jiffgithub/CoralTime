@@ -4,17 +4,24 @@ using CoralTime.DAL.Models.Member;
 using CoralTime.DAL.Models.ReportsSettings;
 using CoralTime.DAL.Models.Vsts;
 using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Extensions;
 using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Reflection.Emit;
 using System.Threading.Tasks;
 
 namespace CoralTime.DAL
 {
     public partial class AppDbContext : IdentityDbContext<ApplicationUser>, IPersistedGrantDbContext
     {
+        private readonly OperationalStoreOptions storeOptions;
+
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
+
 
         public DbSet<Member> Members { get; set; }
 
@@ -39,6 +46,7 @@ namespace CoralTime.DAL
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
 
         public DbSet<ReportsSettings> ReportsSettings { get; set; }
+        public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
 
         public DbSet<MemberAction> MemberActions { get; set; }
 
@@ -55,6 +63,14 @@ namespace CoralTime.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            var options = new OperationalStoreOptions
+            {
+                 
+            };
+
+            builder.ConfigurePersistedGrantContext(options);
+
             builder.Entity<TimeEntry>()
                 .HasOne(p => p.Project)
                 .WithMany(p => p.TimeEntries).HasForeignKey(k => k.ProjectId).OnDelete(DeleteBehavior.Restrict);
@@ -121,9 +137,7 @@ namespace CoralTime.DAL
                 .HasOne(wp => wp.Project)
                 .WithMany(p => p.MemberProjectRoles).HasForeignKey(k => k.ProjectId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<PersistedGrant>()
-                .HasKey(p => p.Key);
-
+            
             builder.Entity<ReportsSettings>()
                 .HasIndex(t => new { ReportsSettingsId = t.MemberId, t.QueryName }).IsUnique();
 
