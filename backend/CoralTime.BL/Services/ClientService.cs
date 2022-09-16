@@ -11,6 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoralTime.DAL.ConvertModelToView;
+using System.Text.Json;
+using MimeKit.Text;
+using Newtonsoft.Json;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace CoralTime.BL.Services
 {
@@ -71,14 +76,17 @@ namespace CoralTime.BL.Services
             return result;
         }
 
-        public ClientView Update(dynamic clientData)
+        public ClientView Update(int id, JsonElement clientDataElement)
         {
-            var client = Uow.ClientRepository.GetById((int)clientData.Id);
+            var client = Uow.ClientRepository.GetById(id);
 
             if (client == null)
             {
-                throw new CoralTimeEntityNotFoundException($"Client with id {clientData.Id} not found");
+                throw new CoralTimeEntityNotFoundException($"Client with id {id} not found");
             }
+
+            var expConverter = new ExpandoObjectConverter();
+            dynamic clientData = JsonConvert.DeserializeObject<ExpandoObject>(clientDataElement.GetRawText(), expConverter);
 
             UpdateService<Client>.UpdateObject(clientData, client);
 
@@ -105,7 +113,7 @@ namespace CoralTime.BL.Services
 
         #region help methods
 
-        private void RememberProjectStatusBeforeArchiving(dynamic clientData, Client client)
+        private void RememberProjectStatusBeforeArchiving(IDictionary<string,object> clientData, Client client)
         {
             if (UpdateService<Client>.HasField(clientData, "isActive"))
             {

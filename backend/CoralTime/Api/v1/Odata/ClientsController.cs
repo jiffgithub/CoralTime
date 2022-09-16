@@ -72,11 +72,9 @@ namespace CoralTime.Api.v1.Odata
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Update([FromODataUri]int id, [FromBody]dynamic clientData)
         {
-            clientData.Id = id;
-
             try
             {
-                var result = _service.Update(clientData);
+                var result = _service.Update(id, clientData);
                 return new ObjectResult(result);
             }
             catch (Exception e)
@@ -90,11 +88,9 @@ namespace CoralTime.Api.v1.Odata
         [Authorize(Roles = ApplicationRoleAdmin)]
         public IActionResult Patch([FromODataUri]int id, [FromBody]dynamic clientData)
         {
-            clientData.Id = id;
-
             try
             {
-                var result = _service.Update(clientData);
+                var result = _service.Update(id, clientData);
                 return new ObjectResult(result);
             }
             catch (Exception e)
