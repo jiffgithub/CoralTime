@@ -50,6 +50,7 @@ using CoralTime.ViewModels.MemberActions;
 using Microsoft.IdentityModel.Logging;
 using CoralTime.ViewModels.Vsts;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CoralTime
 {
@@ -108,7 +109,10 @@ namespace CoralTime
             services.AddMvc();
 
             // Add OData
-            services.AddControllers().AddOData(opt => opt.AddRouteComponents("api/v1/odata",GetEdmModel()).Select().Filter().OrderBy().Expand().Count().SetMaxTop(null));
+            services.AddControllers()
+                    
+                    .AddOData(opt => opt.AddRouteComponents("api/v1/odata",GetEdmModel()).Select().Filter().OrderBy().Expand().Count().SetMaxTop(null));
+
             services.AddMvcCore(options =>
             {
                 options.EnableEndpointRouting = false;
@@ -121,11 +125,11 @@ namespace CoralTime
                 {
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
+            })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.Converters.Insert(0, new TrimmingStringConverter());
             });
-            //.AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.Converters.Insert(0, new TrimmingStringConverter());
-            //});
 
             SetupIdentity(services);
             services.AddSwaggerGen(c =>

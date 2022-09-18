@@ -14,11 +14,11 @@ namespace CoralTime.BL.Interfaces
 
         ProjectView GetById(int id);
 
-        ProjectView Update(int id, JsonElement projectView);
+        ProjectView Update(int id, dynamic projectView);
 
-        ProjectView Create(JsonElement newProject);
+        ProjectView Create(dynamic newProject);
 
-        ProjectView Patch(int id, JsonElement projectView);
+        ProjectView Patch(int id, dynamic projectView);
 
         IEnumerable<MemberView> GetMembers(int projectId);
 

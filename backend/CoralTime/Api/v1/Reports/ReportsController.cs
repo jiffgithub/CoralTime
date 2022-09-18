@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Text.Json;
 using static CoralTime.Common.Constants.Constants.Routes;
 
 namespace CoralTime.Api.v1.Reports
@@ -22,7 +21,7 @@ namespace CoralTime.Api.v1.Reports
         public IActionResult GetReportsDropdowns(DateTimeOffset? date)
         {
             return new JsonResult(_service.GetReportsDropDowns(date?.DateTime));
-        } 
+        }
 
         [HttpPost]
         public IActionResult GetReportsGridAndSaveCurrentQuery([FromBody] ReportsGridView reportsGridView)
@@ -32,10 +31,11 @@ namespace CoralTime.Api.v1.Reports
                 return BadRequest("Invalid Model");
             }
 
-            var jsonSerializatorSettings = new JsonSerializerOptions();
-            
-            jsonSerializatorSettings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            jsonSerializatorSettings.IgnoreNullValues = true;
+            var jsonSerializatorSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
+            };
 
             _service.CheckAndSaveCurrentQuery(reportsGridView);
 

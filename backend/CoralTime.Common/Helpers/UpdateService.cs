@@ -1,48 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using static CoralTime.Common.Constants.Constants;
 
 namespace CoralTime.Common.Helpers
 {
     public class UpdateService<T>
     {
-        public static T UpdateObject(IDictionary<string,object> delta, T currentObject)
+        public static T UpdateObject(dynamic delta, T currentObject)
         {
             var propertyInfoes = typeof(T).GetProperties();
 
             foreach (var propertyInfo in propertyInfoes)
             {
-                if (StringHandler.ToLowerCamelCase(propertyInfo.Name)!="id" &&
+                if (StringHandler.ToLowerCamelCase(propertyInfo.Name) != "id" &&
                     HasField(delta, StringHandler.ToLowerCamelCase(propertyInfo.Name)))
                 {
                     if (propertyInfo.PropertyType.Name.Contains("Nullable"))
                     {
-                        Int32? value = Convert.ToInt32(delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)]);
+                        int? value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
                         propertyInfo.SetValue(currentObject, value);
                     }
                     else if (propertyInfo.PropertyType.Name.Contains("DateTime"))
                     {
-                        DateTime value = (DateTime)delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
-                        propertyInfo.SetValue(currentObject, value);
-                    }
-                    else if (propertyInfo.PropertyType.Name.Contains("Boolean"))
-                    {
-                        Boolean value = Boolean.Parse(delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)].ToString());
+                        DateTime value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
                         propertyInfo.SetValue(currentObject, value);
                     }
                     else if (propertyInfo.PropertyType.Name.Contains("Double"))
                     {
-                        double value = (double)delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
+                        double value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
                         propertyInfo.SetValue(currentObject, value);
                     }
                     else if (propertyInfo.PropertyType.Name.Contains("LockTimePeriod"))
                     {
-                        LockTimePeriod value = (LockTimePeriod)(Int32.Parse(delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)].ToString()));
+                        LockTimePeriod value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
                         propertyInfo.SetValue(currentObject, value);
                     }
                     else
                     {
-                        string value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)].ToString();
+                        string value = delta[StringHandler.ToLowerCamelCase(propertyInfo.Name)];
                         propertyInfo.SetValue(currentObject, Convert.ChangeType(value, propertyInfo.PropertyType));
                     }
                 }
@@ -51,13 +45,18 @@ namespace CoralTime.Common.Helpers
             return currentObject;
         }
 
-        public static bool HasField(IDictionary<string, object> dynamicObject, string fieldName)
+        public static bool HasField(dynamic dynamicObject, string fieldName)
         {
-            if (!dynamicObject.ContainsKey(fieldName))
+            var field = dynamicObject[fieldName];
+            try
+            {
+                var result = field.HasValues;
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
-
-            var value = dynamicObject[fieldName];
-            return value != null;
+            }
         }
     }
 }

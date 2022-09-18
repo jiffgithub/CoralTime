@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using CoralTime.ViewModels.Projects;
 using CoralTime.ViewModels.Member;
 using CoralTime.ViewModels.Member.MemberImage;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace CoralTime.ViewModels.MemberProjectRoles
 {
@@ -32,14 +34,15 @@ namespace CoralTime.ViewModels.MemberProjectRoles
 
         public bool IsMemberActive { get; set; }
 
-
         public int RoleId { get; set; }
 
         public string RoleName { get; set; }
 
+        public MemberProjectRoleViewRole Role { get; set; }
 
         public IEnumerable<MemberView> Members { get; set; }
 
         public IEnumerable<ProjectView> Projects { get; }
+
     }
 }

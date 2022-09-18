@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.OData.Formatter;
 namespace CoralTime.Api.v1.Odata.Members
 {
 
-    [Authorize]
+    //[Authorize]
     public class MemberProjectRolesController : BaseODataController<MemberProjectRolesController, IMemberProjectRoleService>
     {
         public MemberProjectRolesController(ILogger<MemberProjectRolesController> logger, IMemberProjectRoleService service)
@@ -74,7 +74,7 @@ namespace CoralTime.Api.v1.Odata.Members
         }
 
         // POST: api/v1/odata/MemberProjectRoles
-        [HttpPost(MemberProjecRolesRoute)]
+        [HttpPost(MemberProjectRolesRoute)]
         public IActionResult Create([FromBody]MemberProjectRoleView projectRole)
         {
             try

@@ -12,6 +12,6 @@ namespace CoralTime.BL.Interfaces
 
         ClientView GetById(int clientId);
 
-        ClientView Update(int id, JsonElement clientData);
+        ClientView Update(int id, dynamic clientData);
     }
 }

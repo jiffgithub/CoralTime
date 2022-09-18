@@ -3,19 +3,17 @@ using CoralTime.BL.Helpers;
 using CoralTime.BL.Interfaces;
 using CoralTime.Common.Exceptions;
 using CoralTime.Common.Helpers;
+using CoralTime.DAL.ConvertModelToView;
 using CoralTime.DAL.Models;
 using CoralTime.DAL.Repositories;
 using CoralTime.ViewModels.Clients;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CoralTime.DAL.ConvertModelToView;
-using System.Text.Json;
-using MimeKit.Text;
-using Newtonsoft.Json;
 using System.Dynamic;
-using Newtonsoft.Json.Converters;
+using System.Linq;
 
 namespace CoralTime.BL.Services
 {
@@ -76,7 +74,7 @@ namespace CoralTime.BL.Services
             return result;
         }
 
-        public ClientView Update(int id, JsonElement clientDataElement)
+        public ClientView Update(int id, dynamic clientData)
         {
             var client = Uow.ClientRepository.GetById(id);
 
@@ -84,9 +82,6 @@ namespace CoralTime.BL.Services
             {
                 throw new CoralTimeEntityNotFoundException($"Client with id {id} not found");
             }
-
-            var expConverter = new ExpandoObjectConverter();
-            dynamic clientData = JsonConvert.DeserializeObject<ExpandoObject>(clientDataElement.GetRawText(), expConverter);
 
             UpdateService<Client>.UpdateObject(clientData, client);
 
@@ -113,7 +108,7 @@ namespace CoralTime.BL.Services
 
         #region help methods
 
-        private void RememberProjectStatusBeforeArchiving(IDictionary<string,object> clientData, Client client)
+        private void RememberProjectStatusBeforeArchiving(dynamic clientData, Client client)
         {
             if (UpdateService<Client>.HasField(clientData, "isActive"))
             {
