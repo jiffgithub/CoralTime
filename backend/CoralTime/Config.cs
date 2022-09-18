@@ -28,7 +28,7 @@ namespace CoralTime
             {
                 new ApiResource("WebAPI") {
                     Scopes = new []{ "WebAPI","openid", "profile", "roles" },
-                    UserClaims = { JwtClaimTypes.Email, JwtClaimTypes.Audience, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Subject, JwtClaimTypes.Id }
+                    UserClaims = { JwtClaimTypes.Email,  JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Subject, JwtClaimTypes.Id }
                 }
             };
         }
@@ -40,8 +40,7 @@ namespace CoralTime
             {
                 new ApiScope("WebAPI") 
                 {
-                    
-                    UserClaims = { JwtClaimTypes.Audience, JwtClaimTypes.Email, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Id, JwtClaimTypes.Subject, JwtClaimTypes.Id}
+                    UserClaims = { JwtClaimTypes.Email, JwtClaimTypes.NickName, JwtClaimTypes.Name, JwtClaimTypes.Role, JwtClaimTypes.Id, JwtClaimTypes.Subject, JwtClaimTypes.Id}
                 }
             };
         }

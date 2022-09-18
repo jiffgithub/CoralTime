@@ -297,6 +297,7 @@ namespace CoralTime
                     .AddDeveloperSigningCredential()
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiScopes(Config.GetApiScopes())
+                    .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients(accessTokenLifetime: accessTokenLifetime, refreshTokenLifetime: refreshTokenLifetime, slidingRefreshTokenLifetime: slidingRefreshTokenLifetime))
                     .AddAspNetIdentity<ApplicationUser>()
                     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
@@ -308,6 +309,8 @@ namespace CoralTime
 
                 services.AddIdentityServer()
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                    .AddInMemoryApiResources(Config.GetApiResources())
+                    .AddInMemoryApiScopes(Config.GetApiScopes())
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients(accessTokenLifetime: accessTokenLifetime, refreshTokenLifetime: refreshTokenLifetime, slidingRefreshTokenLifetime: slidingRefreshTokenLifetime))
                     .AddAspNetIdentity<ApplicationUser>()
@@ -325,7 +328,6 @@ namespace CoralTime
                 tokenValidationParameters.ValidateAudience = false;
             }
 
-            tokenValidationParameters.ValidateAudience = false;
 
             services.AddAuthentication(options =>
             {
