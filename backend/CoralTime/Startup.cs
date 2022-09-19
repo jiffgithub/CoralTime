@@ -148,12 +148,15 @@ namespace CoralTime
                 app.UseDeveloperExceptionPage();
             }
 
-            //SetupAngularRouting(app);
+
+            // Uses static file for the current path.
+            SetupAngularRouting(app);
 
             app.UseDefaultFiles();
 
             // Uses static file for the current path.
             app.UseStaticFiles();
+
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -161,12 +164,10 @@ namespace CoralTime
                 RequestPath = "/StaticFiles"
             });
 
-
             app.UseIdentityServer();
 
             // Add middleware exceptions
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-
 
             //Make sure you add app.UseCors before app.UseMvc otherwise the request will be finished before the CORS middleware is applied
             app.UseCors("AllowAllOrigins");
@@ -179,18 +180,18 @@ namespace CoralTime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoralTime V1");
             });
 
-            app.UseAuthentication();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
+
 
             Constants.EnvName = env.EnvironmentName;
 
@@ -238,7 +239,9 @@ namespace CoralTime
         {
             app.Use(async (context, next) =>
             {
-                if (context.Request.Path.HasValue && null != Constants.AngularRoutes.FirstOrDefault(ar => context.Request.Path.Value.StartsWith(ar, StringComparison.OrdinalIgnoreCase)))
+                if (context.Request.Path.HasValue && 
+                    null != Constants.AngularRoutes.FirstOrDefault(ar => context.Request.Path.Value.StartsWith(ar, StringComparison.OrdinalIgnoreCase)) && 
+                    !Path.HasExtension(context.Request.Path.Value))
                 {
                     context.Request.Path = new PathString("/");
 

@@ -3,7 +3,7 @@
   "version": "v1.0.0",
   "scripts": {
     "1_1_Npm_Version": "npm version",
-    "1_2_Npm_Install": "cd ../../frontend & npm install --legacy-peer-deps",
+    "1_2_Npm_Install": "cd ../../frontend & npm install @angular/cli@1.7.2  --legacy-peer-deps",
     "2_1_Build_FrontEnd_Developing": "cd ../../frontend & npm run build",
     "2_2_Build_FrontEnd_Production": "cd ../../frontend & npm run production",
     "3_1_Npm_Install_WithUpdates": "cd ../../frontend & npm install npm install i -g npm-check-updates",

@@ -14,7 +14,7 @@ namespace CoralTime.Common.Constants
         public const string ApplicationRoleAdmin = "admin";
         public const string ApplicationRoleUser = "user";
 
-        public static readonly IEnumerable<string> ApplicationRoles = new[] {ApplicationRoleAdmin, ApplicationRoleUser};
+        public static readonly IEnumerable<string> ApplicationRoles = new[] { ApplicationRoleAdmin, ApplicationRoleUser };
 
         #endregion
 
@@ -94,7 +94,7 @@ namespace CoralTime.Common.Constants
             private const string WithUrlAvatar = "/UrlAvatar";
             private const string WithToken = "/{token}";
             private const string BaseApiRoute = "api/v1/";
-            
+
             public static class OData
             {
                 public const string BaseODataRoute = "api/v1/odata";
@@ -125,7 +125,7 @@ namespace CoralTime.Common.Constants
         public const string ProjectRoleManager = "manager";
         public const string ProjectRoleMember = "team member";
 
-        public static readonly IEnumerable<string> ProjectRoles = new[] {ProjectRoleManager, ProjectRoleMember};
+        public static readonly IEnumerable<string> ProjectRoles = new[] { ProjectRoleManager, ProjectRoleMember };
 
         #endregion
 
@@ -145,7 +145,7 @@ namespace CoralTime.Common.Constants
         public const int SecondsInMinute = 60;
 
         public static string EnvName { get; set; }
-        
+
         public const string CoralTime = "CoralTime";
 
         public enum FileType
@@ -215,7 +215,7 @@ namespace CoralTime.Common.Constants
             new DateConvert {DateFormatId = 12, DateFormat = "D/M/YYYY", DateFormatDotNet = "d/M/yyyy", DateFormatDotNetShort = "d/M"},
             new DateConvert {DateFormatId = 13, DateFormat = "D-M-YYYY", DateFormatDotNet = "d-M-yyyy", DateFormatDotNetShort = "d-M"},
             new DateConvert {DateFormatId = 14, DateFormat = "D.M.YYYY", DateFormatDotNet = "d.M.yyyy", DateFormatDotNetShort = "d.M"},
-                                            
+
             new DateConvert {DateFormatId = 15, DateFormat = "M/D/YYYY", DateFormatDotNet = "M/d/yyyy", DateFormatDotNetShort = "M/d"},
             new DateConvert {DateFormatId = 16, DateFormat = "M-D-YYYY", DateFormatDotNet = "M-d-yyyy", DateFormatDotNetShort = "M-d"},
             new DateConvert {DateFormatId = 17, DateFormat = "M.D.YYYY", DateFormatDotNet = "M.d.yyyy", DateFormatDotNetShort = "M.d"},
@@ -301,7 +301,7 @@ namespace CoralTime.Common.Constants
         public const string ImageTypeAvatar = "ImageTypeAvatar";
         public const string ImageTypeIcon = "ImageTypeIcon";
 
-        public const int  ImageTypeSizeIcon = 40;
+        public const int ImageTypeSizeIcon = 40;
         public const int ImageTypeSizeAvatar = 200;
         public const string GravatarType = "robohash";
         public const string GravatarUrl = "https://www.gravatar.com/avatar/";
